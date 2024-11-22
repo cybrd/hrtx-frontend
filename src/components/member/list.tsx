@@ -6,6 +6,7 @@ import { A } from "@solidjs/router";
 import { memberCounts, memberDelete, memberList } from "../../services/member";
 import { AuthContext } from "../../context/auth";
 import { Query } from "../../models/query";
+import { sortBy } from "../helper/sort-by";
 
 export const List = () => {
   const [show, setShow] = createSignal(false);
@@ -22,7 +23,7 @@ export const List = () => {
   const [options] = createSignal<Query>({
     token: auth.user()?.token || "",
   });
-  const [data] = createResource(() => options(), memberList);
+  const [data, { mutate }] = createResource(() => options(), memberList);
   const [counts] = createResource(() => options(), memberCounts);
 
   const handleDelete = (id: string) => {
@@ -42,8 +43,10 @@ export const List = () => {
       <table class="table table-striped table-hover table-bordered">
         <thead class="sticky-top bg-white p-2">
           <tr>
-            <th>Discord Name</th>
-            <th>Ingame Name</th>
+            <th onClick={sortBy(data, mutate, "discord_name")}>Discord Name</th>
+            <th onClick={sortBy(data, mutate, "ingame_name")}>Ingame Name</th>
+            <th onClick={sortBy(data, mutate, "weapon")}>Weapon</th>
+            <th onClick={sortBy(data, mutate, "team")}>Team</th>
             <th>-</th>
           </tr>
         </thead>
@@ -57,6 +60,8 @@ export const List = () => {
                     {item().ingame_name}
                   </A>
                 </td>
+                <td>{item().weapon}</td>
+                <td>{item().team}</td>
                 <td>
                   {auth.user()?.username && (
                     <>

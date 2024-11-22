@@ -3,9 +3,61 @@ import { SetStoreFunction, createStore } from "solid-js/store";
 import toast, { Toaster } from "solid-toast";
 import { useNavigate, useParams } from "@solidjs/router";
 
+import { Member, memberTeamList, memberWeaponList } from "../../models/member";
 import { memberGet, memberUpdate } from "../../services/member";
 import { AuthContext } from "../../context/auth";
-import { Member } from "../../models/member";
+
+const selectWeapon = (
+  data: Resource<Member>,
+  setFields: SetStoreFunction<Partial<Member>>
+) => (
+  <div class="form-group row p-1">
+    <label for="selectWeapon" class="col-sm-2 form-label text-end">
+      Weapon
+    </label>
+    <div class="col-sm-4">
+      <select
+        id="selectWeapon"
+        onChange={(e) => setFields("weapon", e.target.value)}
+      >
+        <option value="">----</option>
+        {memberWeaponList.map((x) => {
+          if (data()?.weapon === x) {
+            return <option selected>{x}</option>;
+          }
+
+          return <option>{x}</option>;
+        })}
+      </select>
+    </div>
+  </div>
+);
+
+const selectTeam = (
+  data: Resource<Member>,
+  setFields: SetStoreFunction<Partial<Member>>
+) => (
+  <div class="form-group row p-1">
+    <label for="selectTeam" class="col-sm-2 form-label text-end">
+      Team
+    </label>
+    <div class="col-sm-4">
+      <select
+        id="selectTeam"
+        onChange={(e) => setFields("team", e.target.value)}
+      >
+        <option value="">----</option>
+        {memberTeamList.map((x) => {
+          if (data()?.team === x) {
+            return <option selected>{x}</option>;
+          }
+
+          return <option>{x}</option>;
+        })}
+      </select>
+    </div>
+  </div>
+);
 
 const inputDiscordName = (
   data: Resource<Member>,
@@ -73,6 +125,8 @@ export const Update = () => {
         <form id="form" onSubmit={submit}>
           {inputDiscordName(data, setFields)}
           {inputIngameName(data, setFields)}
+          {selectWeapon(data, setFields)}
+          {selectTeam(data, setFields)}
 
           <div class="col-sm-6 text-center">
             <button type="submit" class="btn btn-primary">

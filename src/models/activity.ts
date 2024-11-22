@@ -17,4 +17,6 @@ export const activityTypeList = [
   "Guild Reputation",
   "Bestowed",
   "Bestowed (Archboss)",
+  "Tax Delivery",
+  "Castle Siege",
 ] as const;

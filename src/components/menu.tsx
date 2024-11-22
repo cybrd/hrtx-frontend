@@ -29,11 +29,6 @@ export const Menu: Component = () => {
           </div>
         </>
       )}
-      {!auth.user()?.username && (
-        <div>
-          <A href="/login">Login</A>
-        </div>
-      )}
     </div>
   );
 };
